@@ -8,7 +8,7 @@ namespace Codingfield {
     public:
       enum class WifiStatuses {Unknown, No_signal, Weak, Medium, Full};
       StatusBar() : Bar() {}
-      StatusBar(Widget* parent, Point position, int32_t height) : Bar(parent, position, height) {}
+      StatusBar(Widget* parent, Point position, int32_t height) : Bar(parent, position, height) {_statusSpace = GUI.Lcd.TEXT_MARGIN;}
       void Draw() override;
       void SetWifiStatus(const WifiStatuses status);
       void SetUptime(const uint32_t t);
@@ -22,6 +22,8 @@ namespace Codingfield {
       uint32_t oldUptime = UINT32_MAX;
       std::string dateTime;
       std::string oldDateTime;
+
+      int _statusSpace=1;
     };
   }
 }

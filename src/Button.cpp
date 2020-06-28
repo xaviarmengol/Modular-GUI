@@ -3,8 +3,7 @@
 #include "Button.h"
 #include "Free_Fonts.h"
 
-#define GRAPHRESOLUTION 30
-#define GRAPHSPACE 10
+#include "GUIHal.h"
 
 using namespace Codingfield::UI;
 
@@ -16,8 +15,10 @@ Codingfield::UI::Button::Button(Widget* parent) : Widget(parent) {
 
 Codingfield::UI::Button::Button(Widget* parent, int32_t* ptrVar, unsigned long* ptrTime) : Widget(parent, ptrVar, ptrTime) {
 
+  
+
   // Define the buffer used in the graph
-  circBuffer.SetSize(GRAPHRESOLUTION);
+  circBuffer.SetSize(GUI.Lcd.GRAPH_RESOLUTION);
 
 }
 
@@ -99,6 +100,7 @@ void Codingfield::UI::Button::Draw() {
       reDrawGraph=true;
     }
   }
+  
 
   if(!IsInZoom()) { 
 
@@ -154,10 +156,10 @@ void Codingfield::UI::Button::DrawNormal(std::string strText) {
     GUI.Lcd.setTextSize(textSize);
 
     GUI.Lcd.setFreeFont("FF22");
-    GUI.Lcd.drawString(oldText.c_str(), x, yText);
+    GUI.Lcd.drawString(oldText.c_str(), x, yText, true);
 
     GUI.Lcd.setTextColor(textColor);
-    GUI.Lcd.drawString(text.c_str(), x, yText);
+    GUI.Lcd.drawString(text.c_str(), x, yText, true);
     oldText = text;
   }
 
@@ -166,18 +168,18 @@ void Codingfield::UI::Button::DrawNormal(std::string strText) {
     GUI.Lcd.setTextColor(backgroundColor);
 
     GUI.Lcd.setFreeFont("FF21");
-    GUI.Lcd.drawString(oldTitle.c_str(), x, yTitle);
+    GUI.Lcd.drawString(oldTitle.c_str(), x, yTitle, true);
 
     GUI.Lcd.setTextColor(textColor);
-    GUI.Lcd.drawString(title.c_str(), x, yTitle);
+    GUI.Lcd.drawString(title.c_str(), x, yTitle, true);
     oldTitle = title;
   }
 
   if(forceUpdate || (wasSelected != isSelected)) {
     if(isSelected) {
-      GUI.Lcd.drawRect(position.x, position.y, size.width, size.height, RED);
-      GUI.Lcd.drawRect(position.x+1, position.y+1, size.width-2, size.height-2, RED);
-      GUI.Lcd.drawRect(position.x+2, position.y+2, size.width-4, size.height-4, RED);
+      GUI.Lcd.drawRect(position.x, position.y, size.width, size.height, GUI.Lcd.COLOR_RED);
+      GUI.Lcd.drawRect(position.x+1, position.y+1, size.width-2, size.height-2, GUI.Lcd.COLOR_RED);
+      GUI.Lcd.drawRect(position.x+2, position.y+2, size.width-4, size.height-4, GUI.Lcd.COLOR_RED);
     } else {
       GUI.Lcd.drawRect(position.x, position.y, size.width, size.height, backgroundColor);
       GUI.Lcd.drawRect(position.x + 1, position.y + 1, size.width - 2, size.height - 2, backgroundColor);
@@ -197,7 +199,7 @@ void Codingfield::UI::Button::DrawZoomGraph() {
     GUI.Lcd.fillRect(position.x-1, position.y-1, size.width+2, size.height+2, GUI.Lcd.COLOR_BLACK);
   }
 
-  int spaceInterval = GRAPHSPACE;
+  int spaceInterval = GUI.Lcd.GRAPH_SPACE;
 
   // Draw the graph
   GUI.Lcd.fillRect(position.x-1, position.y-1, size.width+2, size.height+2, GUI.Lcd.COLOR_BLACK);
@@ -211,13 +213,13 @@ void Codingfield::UI::Button::DrawZoomGraph() {
   GUI.Lcd.setFreeFont("TT1");
   GUI.Lcd.setTextColor(GUI.Lcd.COLOR_WHITE);
   GUI.Lcd.setTextColor(GUI.Lcd.COLOR_WHITE);
-  GUI.Lcd.drawString(String(scaleMax).c_str(), position.x+10, position.y+10);
-  GUI.Lcd.drawString(String(scaleMin).c_str(), position.x+10, size.height + position.y-10);
+  GUI.Lcd.drawString(String(scaleMax).c_str(), position.x+GUI.Lcd.GRAPH_MARGIN, position.y+GUI.Lcd.GRAPH_MARGIN);
+  GUI.Lcd.drawString(String(scaleMin).c_str(), position.x+GUI.Lcd.GRAPH_MARGIN, size.height + position.y-GUI.Lcd.GRAPH_MARGIN);
 
   int zeroScaled = size.height + position.y - map(0, scaleMin, scaleMax, 0, size.height);
-  GUI.Lcd.drawLine(position.x+5, zeroScaled, position.x + size.width -5, zeroScaled, GUI.Lcd.COLOR_WHITE);
+  GUI.Lcd.drawLine(position.x+GUI.Lcd.BUTTON_LINE, zeroScaled, position.x + size.width -GUI.Lcd.BUTTON_LINE, zeroScaled, GUI.Lcd.COLOR_WHITE);
 
-  for (int i=0;i<GRAPHRESOLUTION;i++) {
+  for (int i=0;i<GUI.Lcd.GRAPH_SPACE;i++) {
 
     int value = circBuffer.at(i);
     value = constrain(value, 0, size.height);

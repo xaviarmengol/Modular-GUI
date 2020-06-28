@@ -48,7 +48,7 @@ void Widget::SetTextSize(uint8_t textSize) {
   this->textSize = textSize;
 }
 
-
 uint8_t Widget::GetTextSize() {
   return(textSize);
 }
+

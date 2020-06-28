@@ -31,8 +31,8 @@ namespace Codingfield {
       StatusBar* topBar = nullptr;
       ButtonInfoBar* bottomBar = nullptr;
       Widget* centreWidget = nullptr;
-      int32_t padding = 5;
-      int32_t barHeight = 25;
+      int32_t padding = 1; // To be defined in GUIHal
+      int32_t barHeight = 25; // To be defined in GUIHal
 
       void _ManagePhisicalButtons(Widget* focus=nullptr);
       unsigned long _lastTs;

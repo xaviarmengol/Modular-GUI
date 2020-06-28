@@ -4,6 +4,8 @@
 #include <ButtonInfoBar.h>
 #include <WidgetMosaicComp.h>
 
+#include "GUIHal.h"
+
 using namespace Codingfield::UI;
 
 AppScreen::AppScreen(Size size, Color color) : Screen(size, color) {
@@ -11,6 +13,10 @@ AppScreen::AppScreen(Size size, Color color) : Screen(size, color) {
 }
 
 AppScreen::AppScreen(Size size, Color color, StatusBar* topBar, ButtonInfoBar* bottomBar, WidgetMosaicComp* centreWidget) : Screen(size, color), topBar{topBar}, bottomBar{bottomBar}, centreWidget{centreWidget} {
+
+  barHeight = GUI.Lcd.BAR_HEIGHT;
+  padding = GUI.Lcd.WIDGET_PADDING;
+
   if(topBar != nullptr) {
     topBar->SetParent(this);
     topBar->SetPosition(Point(0,0));

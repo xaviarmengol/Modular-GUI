@@ -1,7 +1,7 @@
 #include "GUIHalM5.h"
 #include "Free_Fonts.h"
 
-LcdM5::LcdM5(/* args */) {}
+LcdM5::LcdM5(int w, int h) : _w(w), _h(h) {}
 
 LcdM5::~LcdM5() {}
 
@@ -59,7 +59,10 @@ void LcdM5::setFreeFont(std::string fontName){
 
 }
 
-void LcdM5::drawString(std::string textToDraw, int posX, int posY){
+void LcdM5::drawString(std::string textToDraw, int posX, int posY, bool centered){
+
+    // TODO: Implement centered text
+    
     M5.lcd.drawString(textToDraw.c_str(), posX, posY);
 }
 

@@ -7,7 +7,6 @@
 //#include "GUIHal.h"
 
 
-
 // Necessary to deal with ButtonInfoBar / StatusBar handlers
 #include <ButtonInfoBar.h>
 #include <StatusBar.h>

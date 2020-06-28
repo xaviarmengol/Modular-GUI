@@ -35,6 +35,8 @@ void WidgetMosaic::Draw() {
 void WidgetMosaic::AddChild(Widget* widget) {
   Widget::AddChild(widget);
 
+  border = GUI.Lcd.WIDGET_PADDING;
+
   Size widgetSize = ComputeWidgetSize();
   widget->SetSize(widgetSize);
 

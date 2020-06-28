@@ -3,22 +3,29 @@
 #include "GUIHalM5.h"
 #include "GUIHalOled.h"
 
+#include "BtnSerial.h"
 
 class GUIHal {
 
     private:
-    /* data */
+        int _w;
+        int _h;
 
     public:
-        GUIHal(/* args */);
+        GUIHal(int w, int h);
         ~GUIHal();
 
         // Public GUI Hal objects
 
-        LcdOled Lcd;
+        LcdOled Lcd = LcdOled(_w, _h);
 
-        BtnM5 BtnA = BtnM5(0);
-        BtnM5 BtnB = BtnM5(1);
-        BtnM5 BtnC = BtnM5(2);
+        BtnSerial BtnA = BtnSerial(0);
+        BtnSerial BtnB = BtnSerial(1);
+        BtnSerial BtnC = BtnSerial(2);
+
+        int getW();
+        int getH();
 
 };
+
+extern GUIHal GUI;

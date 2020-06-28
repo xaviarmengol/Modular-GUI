@@ -8,17 +8,17 @@
 #include "GUIHalOled.h"
 #include "Free_Fonts.h"
 
+#include <Arduino.h>
 
 //#include <SPI.h>
 //#include <Wire.h>
 
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
-// Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
-#define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+LcdOled::LcdOled(int w, int h) : _w(w), _h(h) {
 
-LcdOled::LcdOled(/* args */) {}
+    // Reset pin # (or -1 if sharing Arduino reset pin)
+    display =  Adafruit_SSD1306(_w, _h, &Wire, -1);
+
+}
 
 LcdOled::~LcdOled() {}
 
@@ -49,27 +49,23 @@ void LcdOled::clearDisplay() {
 }
 
 void LcdOled::drawRect(int posX, int posY, int width, int heigh, int color) {
-    display.drawRect(posX, posY, width, heigh, color);
-    
-    display.drawRect(posX, posY, width, heigh, color);
+    display.drawRect(posX, posY, width, heigh, fromColorToBW(color));
     delayOled();
 
 }
 
 void LcdOled::drawLine(int posX, int posY, int newX, int newY, int color) {
-    display.drawLine(posX, posY, newX, newY, color);
-
-    display.drawLine(posX, posY, newX, newY, color);
+    display.drawLine(posX, posY, newX, newY, fromColorToBW(color));
     delayOled();
 }
 
 void LcdOled::fillRect(int posX, int posY, int width, int heigh, int color) {
-    display.fillRect(posX, posY, width, heigh, color);
+    display.fillRect(posX, posY, width, heigh, fromColorToBW(color));
     delayOled();
 }
 
 void LcdOled::fillScreen(int color){
-    display.fillScreen(color);
+    display.fillScreen(fromColorToBW(color));
     delayOled();
 }
 
@@ -79,7 +75,7 @@ void LcdOled::setTextDatum(int tcDatum){
 }
 
 void LcdOled::setTextColor(int color){
-    display.setTextColor(color);
+    display.setTextColor(fromColorToBW(color));
 }
 
 void LcdOled::setTextSize(int size){
@@ -96,19 +92,36 @@ void LcdOled::setFreeFont(std::string fontName){
     if (fontName=="FF22") font = FF22;
     if (fontName=="TT1") font = TT1;
 
-    display.setFont(font);
+    // TODO: manage font size
+
+    // display.setFont(font);
+
 }
 
-void LcdOled::drawString(std::string textToDraw, int posX, int posY){
+void LcdOled::drawString(std::string textToDraw, int posX, int posY, bool centered){
+
+    String text = String(textToDraw.c_str());    
+    int16_t  xInit, yInit;
+    uint16_t wText, hText;
+    display.getTextBounds(text, posX, posY, &xInit, &yInit, &wText, &hText);
+
     int posXOld;
     int posYOld;
     posXOld = display.getCursorX();
     posYOld = display.getCursorY();
-    
-    display.setCursor(posX, posY);
-    display.print(textToDraw.c_str());
-    display.setCursor(posXOld, posYOld);
 
+    int targetX = posX;
+    int targetY = posY;
+    
+    if (centered) {
+        targetX = targetX - wText/2;
+        targetY = targetY; // Only the width is centered
+    }
+    
+    display.setCursor(targetX, targetY);
+    display.print(textToDraw.c_str());
+
+    display.setCursor(posXOld, posYOld);
     delayOled();
 }
 
@@ -148,6 +161,13 @@ void LcdOled::pushImage(int x0, int y0, int w, int h, uint8_t  *data, bool bpp8)
 void LcdOled::delayOled(){
     display.display();
     delay(1);
+}
+
+int LcdOled::fromColorToBW(int color){
+    int bwColor = color;
+    if (color != COLOR_WHITE) bwColor = COLOR_BLACK;
+
+    return (bwColor);
 }
 
 

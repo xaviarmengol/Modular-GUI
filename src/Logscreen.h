@@ -19,6 +19,8 @@ namespace Codingfield {
 
       bool _oldIsInZoom=false;
 
+      int _lcdWidth;
+
     };
   }
 }

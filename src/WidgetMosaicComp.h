@@ -5,8 +5,6 @@
 #include "Point.h"
 #include "Free_Fonts.h"
 
-#define PADDING 5
-
 namespace Codingfield {
   namespace UI {
     class WidgetMosaicComp : public Button {
@@ -49,6 +47,9 @@ namespace Codingfield {
       bool oldIsInZoom = false;
 
       bool oldIsActiveMosaic=false;
+
+      int _guiH;
+      int _guiW;
 
     };
   }

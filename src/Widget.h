@@ -44,8 +44,6 @@ namespace Codingfield {
 
       String codeId="";
 
-      GUIHal GUI;
-
     public:
       Widget(Widget* parent);
       Widget(Widget* parent, Point position, Size size);
@@ -149,6 +147,27 @@ namespace Codingfield {
 
       String GetCodeId(){
         return(codeId);
+      }
+
+
+      // Absolute position of ending vertix of the widget
+
+      int getPosEndX() {
+        return(position.x + size.width);
+      }
+
+      int getPosEndY() {
+        return(position.y + size.height);
+      }
+
+      // Absolute position of the Center of the widget
+
+      int getPosMidX() {
+        return(position.x + size.width/2);
+      }
+
+      int getPosMidY() {
+        return(position.y + size.height/2);
       }
 
 

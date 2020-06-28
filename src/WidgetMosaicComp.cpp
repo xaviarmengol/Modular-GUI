@@ -1,4 +1,8 @@
 #include "WidgetMosaicComp.h"
+#include "GUIHal.h"
+#include "Size.h"
+#include "Point.h"
+
 using namespace Codingfield::UI;
 
 
@@ -22,12 +26,16 @@ WidgetMosaicComp::WidgetMosaicComp(Widget* parent, int32_t nbColumns, int32_t nb
     this->bottomBar = bottomBar;
     this->topBar = topBar;
 
+    _guiW = GUI.getW();
+    _guiH = GUI.getH();
+
+
     SetMosaic(true);
 
 }
 
 
-void Codingfield::UI::WidgetMosaicComp::Draw() {
+void WidgetMosaicComp::Draw() {
 
   if(IsHidden()){
       return;
@@ -38,12 +46,12 @@ void Codingfield::UI::WidgetMosaicComp::Draw() {
   if (oldIsInZoom && !IsInZoom()) {
 
     Point centerPosition;
-    centerPosition.y = 0 + ((topBar != nullptr) ? topBar->GetSize().height : 0) + PADDING;
-    centerPosition.x = 0 + PADDING;
+    centerPosition.y = 0 + ((topBar != nullptr) ? topBar->GetSize().height : 0) + border;
+    centerPosition.x = 0 + border;
 
     Size centerSize;
-    centerSize.height = 240 - (((bottomBar != nullptr) ? bottomBar->GetSize().height : 0) + ((topBar != nullptr) ? topBar->GetSize().height : 0) + PADDING);
-    centerSize.width = 320;
+    centerSize.height = _guiH - (((bottomBar != nullptr) ? bottomBar->GetSize().height : 0) + ((topBar != nullptr) ? topBar->GetSize().height : 0) + border);
+    centerSize.width = _guiW;
 
   }
 
@@ -61,7 +69,7 @@ void Codingfield::UI::WidgetMosaicComp::Draw() {
 }
 
 
-void Codingfield::UI::WidgetMosaicComp::DrawZoom() {
+void WidgetMosaicComp::DrawZoom() {
 
     if(IsHidden()) return;
 
@@ -85,9 +93,11 @@ void Codingfield::UI::WidgetMosaicComp::DrawZoom() {
 
 
 
-void Codingfield::UI::WidgetMosaicComp::AddChild(Widget* widget) {
+void WidgetMosaicComp::AddChild(Widget* widget) {
   
   Widget::AddChild(widget);
+
+  border = GUI.Lcd.WIDGET_PADDING;
 
   Size widgetSize;
   Point pos; 
@@ -97,12 +107,12 @@ void Codingfield::UI::WidgetMosaicComp::AddChild(Widget* widget) {
   // Add childs with the right position and size
 
   Point centerPosition;
-  centerPosition.y = 0 + ((topBar != nullptr) ? topBar->GetSize().height : 0) + PADDING;
-  centerPosition.x = 0 + PADDING;
+  centerPosition.y = 0 + ((topBar != nullptr) ? topBar->GetSize().height : 0) + border;
+  centerPosition.x = 0 + border;
 
   Size centerSize;
-  centerSize.height = 240 - (((bottomBar != nullptr) ? bottomBar->GetSize().height : 0) + ((topBar != nullptr) ? topBar->GetSize().height : 0) + PADDING);
-  centerSize.width = 320;
+  centerSize.height = _guiH - (((bottomBar != nullptr) ? bottomBar->GetSize().height : 0) + ((topBar != nullptr) ? topBar->GetSize().height : 0) + GUI.Lcd.WIDGET_PADDING);
+  centerSize.width = _guiW;
 
   widgetSize = ComputeWidgetSize(centerSize, nbColumns, nbRows);
   pos = centerPosition;
@@ -116,14 +126,14 @@ void Codingfield::UI::WidgetMosaicComp::AddChild(Widget* widget) {
   //widget->println();
 }
 
-const Widget* Codingfield::UI::WidgetMosaicComp::GetSelected() const {
+const Widget* WidgetMosaicComp::GetSelected() const {
   return selectedWidget;
 }
 
 
 // TODO: Factorize this method
 
-void Codingfield::UI::WidgetMosaicComp::ZoomOnSelected(bool enabled) {
+void WidgetMosaicComp::ZoomOnSelected(bool enabled) {
 
   bool oldValue = IsZoomOnSelected();
 
@@ -201,7 +211,7 @@ void Codingfield::UI::WidgetMosaicComp::ZoomOnSelected(bool enabled) {
 
 
 
-void Codingfield::UI::WidgetMosaicComp::OnButtonAPressed() {
+void WidgetMosaicComp::OnButtonAPressed() {
 
   if (!IsInZoom() && parent != nullptr) {
 
@@ -228,7 +238,7 @@ void Codingfield::UI::WidgetMosaicComp::OnButtonAPressed() {
 }
 
 
-void Codingfield::UI::WidgetMosaicComp::OnButtonBPressed() {
+void WidgetMosaicComp::OnButtonBPressed() {
 
   if (!IsInZoom()) {
     
@@ -258,7 +268,7 @@ void Codingfield::UI::WidgetMosaicComp::OnButtonBPressed() {
 }
 
 
-void Codingfield::UI::WidgetMosaicComp::OnButtonBLongPush() {
+void WidgetMosaicComp::OnButtonBLongPush() {
 
   // If mosaic not in zoom, and exit, go to the upper level (if exist)
 
@@ -294,7 +304,7 @@ void Codingfield::UI::WidgetMosaicComp::OnButtonBLongPush() {
 }
 
 
-void Codingfield::UI::WidgetMosaicComp::OnButtonCPressed() {
+void WidgetMosaicComp::OnButtonCPressed() {
 
   if (!IsInZoom() && parent != nullptr) {
 
@@ -322,18 +332,18 @@ void Codingfield::UI::WidgetMosaicComp::OnButtonCPressed() {
 }
 
 
-Size Codingfield::UI::WidgetMosaicComp::ComputeWidgetSize() {
+Size WidgetMosaicComp::ComputeWidgetSize() {
   return ComputeWidgetSize(size,nbColumns, nbRows);
 }
 
-Size Codingfield::UI::WidgetMosaicComp::ComputeWidgetSize(const Size& sizeParam, int32_t nbColumns, int32_t nbRows) {
+Size WidgetMosaicComp::ComputeWidgetSize(const Size& sizeParam, int32_t nbColumns, int32_t nbRows) {
   Size widgetSize;
   widgetSize.width = (sizeParam.width - ((2*border) + ((nbColumns-1)*border))) / nbColumns; // ERA 2 !!!
   widgetSize.height = (sizeParam.height - ((2*border) + ((nbRows-1)*border))) / nbRows;
   return widgetSize;
 }
 
-Point Codingfield::UI::WidgetMosaicComp::ComputeWidgetPosition(const Size& widgetSize, const Point& pos, int32_t position) {
+Point WidgetMosaicComp::ComputeWidgetPosition(const Size& widgetSize, const Point& pos, int32_t position) {
   Point widgetPosition;
 
   int32_t row = ((int32_t)position / (int32_t)nbColumns);
@@ -344,17 +354,17 @@ Point Codingfield::UI::WidgetMosaicComp::ComputeWidgetPosition(const Size& widge
   return widgetPosition;
 }
 
-bool Codingfield::UI::WidgetMosaicComp::IsZoomOnSelected() const {
+bool WidgetMosaicComp::IsZoomOnSelected() const {
   return (zoomOnSelected);
 }
 
-void Codingfield::UI::WidgetMosaicComp::SetZoomOnSelected(bool zoom) {
+void WidgetMosaicComp::SetZoomOnSelected(bool zoom) {
   zoomOnSelected = zoom;
   selectedWidget->SetInZoom(zoom);
 }
 
 
-void Codingfield::UI::WidgetMosaicComp::SetZoomOnSelectedCallback(std::function<void (Widget* widget, bool)>func) {
+void WidgetMosaicComp::SetZoomOnSelectedCallback(std::function<void (Widget* widget, bool)>func) {
   zoomOnSelectedCallback = func;
 }
 

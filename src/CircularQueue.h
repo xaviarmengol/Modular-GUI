@@ -5,7 +5,7 @@
 class CircularQueue {
 private:
     int head;
-    int size;
+    int size = MAXVECSIZE;
     int data[MAXVECSIZE] = {0};
     int min;
     int max;

@@ -27,8 +27,8 @@ void UpDownButton::Draw() {
       GUI.Lcd.setTextDatum(MC_DATUM);
       GUI.Lcd.setTextColor(textColor);
       GUI.Lcd.setTextSize(textSize);
-      GUI.Lcd.drawString("-", position.x + (size.width/6), position.y + (size.height/2));
-      GUI.Lcd.drawString("+", position.x + (size.width - (size.width/6)), position.y + (size.height/2));
+      GUI.Lcd.drawString("-", position.x + (size.width/6), getPosMidY());
+      GUI.Lcd.drawString("+", position.x + (size.width - (size.width/6)), getPosMidY());
 
     }
   }

@@ -1,8 +1,6 @@
 #include "Screen.h"
 #include "Free_Fonts.h"
 
-//#include "GUIHal.h"
-
 using namespace Codingfield::UI;
 
 void Screen::Draw() {
