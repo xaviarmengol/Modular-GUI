@@ -178,12 +178,17 @@ void Codingfield::UI::Button::DrawNormal(std::string strText) {
   if(forceUpdate || (wasSelected != isSelected)) {
     if(isSelected) {
       GUI.Lcd.drawRect(position.x, position.y, size.width, size.height, GUI.Lcd.COLOR_RED);
-      GUI.Lcd.drawRect(position.x+1, position.y+1, size.width-2, size.height-2, GUI.Lcd.COLOR_RED);
-      GUI.Lcd.drawRect(position.x+2, position.y+2, size.width-4, size.height-4, GUI.Lcd.COLOR_RED);
+      if (GUI.Lcd.BIG_SELECTOR) {
+        GUI.Lcd.drawRect(position.x+1, position.y+1, size.width-2, size.height-2, GUI.Lcd.COLOR_RED);
+        GUI.Lcd.drawRect(position.x+2, position.y+2, size.width-4, size.height-4, GUI.Lcd.COLOR_RED);
+      }
+
     } else {
       GUI.Lcd.drawRect(position.x, position.y, size.width, size.height, backgroundColor);
-      GUI.Lcd.drawRect(position.x + 1, position.y + 1, size.width - 2, size.height - 2, backgroundColor);
-      GUI.Lcd.drawRect(position.x + 2, position.y + 2, size.width - 4, size.height - 4, backgroundColor);
+      if (GUI.Lcd.BIG_SELECTOR) {
+        GUI.Lcd.drawRect(position.x + 1, position.y + 1, size.width - 2, size.height - 2, backgroundColor);
+        GUI.Lcd.drawRect(position.x + 2, position.y + 2, size.width - 4, size.height - 4, backgroundColor);
+      }
     }
   }
 

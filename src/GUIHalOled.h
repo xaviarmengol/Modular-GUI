@@ -59,6 +59,8 @@ class LcdOled {
 
         const int GRAPH_MARGIN = 4;
         const int BUTTON_LINE = 2;
+
+        const bool BIG_SELECTOR = false;
 };
 
 class BtnOled {

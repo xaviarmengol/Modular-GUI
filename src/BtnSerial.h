@@ -6,22 +6,22 @@ class BtnSerial {
         int _btnNum = 0;
         char _btnChar = '1';
 
-        bool _readSerial(){
+        bool _readSerial(char readChar){
 
-            int retVal = 0;
+            int foundChar = 0;
 
             if (Serial.available()>0) {
                 char inChar;
                 inChar = Serial.peek();
 
-                if (inChar == _btnChar) {
+                if (inChar == readChar) {
                     inChar = Serial.read();
-                    retVal = 1;
+                    foundChar = 1;
                 }
                 //Serial.println(inChar);
             }
 
-            return (retVal);
+            return (foundChar);
         }
 
     public:
@@ -35,13 +35,15 @@ class BtnSerial {
         //~BtnSerial();
 
         int wasPressed() {
-            return (_readSerial());
+            return (_readSerial(_btnChar));
         }
 
         int wasReleased() {
             return(wasPressed());
         }
 
-        int pressedFor(int ms) {};
+        int pressedFor(int ms) {
+            return(_readSerial('w'));
+        };
 
 };

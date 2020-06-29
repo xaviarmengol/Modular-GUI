@@ -49,6 +49,8 @@ class LcdM5 {
         const int GRAPH_MARGIN = 10;
         const int BUTTON_LINE = 5;
 
+        const bool BIG_SELECTOR = true;
+
         
 };
 
